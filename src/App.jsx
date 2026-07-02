@@ -4,7 +4,7 @@ import PostCard from './components/PostCard';
 import HistoryPanel from './components/HistoryPanel';
 import SettingsModal from './components/SettingsModal';
 import { PLATFORMS } from './lib/constants';
-import { generatePosts, getApiKey, setApiKey } from './lib/nvidia';
+import { generatePosts, generateIdeas, getApiKey, setApiKey } from './lib/nvidia';
 import { addToHistory, clearHistory, getHistory, getSettings, removeFromHistory } from './lib/storage';
 import './App.css';
 
@@ -29,6 +29,9 @@ export default function App() {
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [settings, setSettings] = useState(getSettings());
   const [showSettings, setShowSettings] = useState(false);
+  const [ideaTopic, setIdeaTopic] = useState('');
+  const [ideas, setIdeas] = useState([]);
+  const [ideasLoading, setIdeasLoading] = useState(false);
 
   useEffect(() => {
     setHistory(getHistory());
@@ -53,6 +56,26 @@ export default function App() {
       setIncludeHashtags(newSettings.defaultHashtags);
     }
     setShowSettings(false);
+  };
+
+  const handleGenerateIdeas = async () => {
+    if (!ideaTopic.trim()) return;
+    setIdeasLoading(true);
+    setError('');
+    try {
+      const result = await generateIdeas({ topic: ideaTopic.trim() });
+      setIdeas(result);
+    } catch (err) {
+      setError(err.message || 'Error al generar ideas');
+    } finally {
+      setIdeasLoading(false);
+    }
+  };
+
+  const handleSelectIdea = (idea) => {
+    setTopic(idea);
+    setIdeas([]);
+    setIdeaTopic('');
   };
 
   const handleSaveApiKey = () => {
@@ -163,6 +186,12 @@ export default function App() {
           hasApiKey={hasApiKey}
           onResetApiKey={handleResetApiKey}
           onOpenSettings={handleOpenSettings}
+          ideaTopic={ideaTopic}
+          setIdeaTopic={setIdeaTopic}
+          ideas={ideas}
+          onGenerateIdeas={handleGenerateIdeas}
+          onSelectIdea={handleSelectIdea}
+          ideasLoading={ideasLoading}
         />
         <HistoryPanel
           history={history}

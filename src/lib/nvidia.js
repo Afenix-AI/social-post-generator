@@ -129,3 +129,58 @@ export async function generatePosts({ topic, platform, tone, includeEmojis, incl
 
   return variants.slice(0, 2);
 }
+
+const IDEAS_PROMPT = `Eres un copywriter experto en redes sociales y personal branding.
+
+Dado un tema, genera 5 ideas de post con gancho para LinkedIn/Instagram/X dirigidas a freelances, consultores y emprendedores.
+
+Cada idea debe ser una frase corta con gancho (máximo 15 palabras) que enganche y deje claro el tema del post. Deben ser variadas y cubrir distintos ángulos del tema.
+
+Responde EXCLUSIVAMENTE con un JSON válido, sin texto adicional, con esta forma exacta:
+{"ideas": ["idea 1 con gancho", "idea 2 con gancho", "idea 3 con gancho", "idea 4 con gancho", "idea 5 con gancho"]}`;
+
+export async function generateIdeas({ topic }) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error('MISSING_API_KEY');
+  }
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 500,
+      temperature: 0.9,
+      top_p: 0.95,
+      messages: [
+        { role: 'system', content: IDEAS_PROMPT },
+        { role: 'user', content: `Tema: "${topic}"` },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    const errBody = await response.json().catch(() => ({}));
+    const message = errBody?.error?.message || `Error ${response.status} al llamar a la API de NVIDIA`;
+    throw new Error(message);
+  }
+
+  const data = await response.json();
+  const content = data?.choices?.[0]?.message?.content;
+  if (!content) throw new Error('La respuesta no contiene contenido.');
+
+  let parsed;
+  try {
+    parsed = extractJson(content);
+  } catch (err) {
+    throw new Error('No se pudo interpretar la respuesta como JSON.');
+  }
+
+  const ideas = Array.isArray(parsed.ideas) ? parsed.ideas : [];
+  if (ideas.length < 3) throw new Error('No se generaron suficientes ideas.');
+  return ideas.slice(0, 5);
+}

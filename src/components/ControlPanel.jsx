@@ -21,6 +21,12 @@ export default function ControlPanel({
   hasApiKey,
   onResetApiKey,
   onOpenSettings,
+  ideaTopic,
+  setIdeaTopic,
+  ideas,
+  onGenerateIdeas,
+  onSelectIdea,
+  ideasLoading,
 }) {
   const config = PLATFORMS[platform];
   const [rangeMin, rangeMax] = getTargetCharRange(platform, postLength);
@@ -72,6 +78,41 @@ export default function ControlPanel({
           Cambiar API Key
         </button>
       )}
+
+      <div className="field">
+        <label htmlFor="ideaTopic">Inspírate: genera ideas con gancho</label>
+        <div className="field__row">
+          <input
+            id="ideaTopic"
+            type="text"
+            placeholder="Ej: Cobrar por horas vs por valor"
+            value={ideaTopic}
+            onChange={(e) => setIdeaTopic(e.target.value)}
+          />
+          <button
+            type="button"
+            className="btn btn--secondary btn--sm"
+            onClick={onGenerateIdeas}
+            disabled={ideasLoading || !ideaTopic.trim()}
+          >
+            {ideasLoading ? '...' : 'Generar'}
+          </button>
+        </div>
+        {ideas.length > 0 && (
+          <div className="ideas-list">
+            {ideas.map((idea, i) => (
+              <button
+                key={i}
+                type="button"
+                className="idea-chip"
+                onClick={() => onSelectIdea(idea)}
+              >
+                {idea}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <div className="field">
         <label htmlFor="topic">Idea o tema del post</label>

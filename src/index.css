@@ -1,0 +1,40 @@
+:root {
+  --bg-0: #0d0f12;
+  --bg-1: #15181d;
+  --bg-2: #1c2027;
+  --bg-3: #262b33;
+  --border: #2f3540;
+  --text-0: #f3f4f6;
+  --text-1: #b6bcc6;
+  --text-2: #7d8492;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --success: #22c55e;
+  color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--text-0);
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+textarea {
+  font-family: inherit;
+}

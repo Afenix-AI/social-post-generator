@@ -72,8 +72,17 @@ Responde EXCLUSIVAMENTE con un JSON válido, sin texto adicional antes ni despu�
 function extractJson(rawText) {
   const trimmed = rawText.trim();
   const fenceMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  const candidate = fenceMatch ? fenceMatch[1] : trimmed;
-  return JSON.parse(candidate);
+  const candidate = fenceMatch ? fenceMatch[1].trim() : trimmed;
+
+  try {
+    return JSON.parse(candidate);
+  } catch {
+    const arrayMatch = candidate.match(/\[[\s\S]*?\]/);
+    if (arrayMatch) return JSON.parse(arrayMatch[0]);
+    const objMatch = candidate.match(/\{[\s\S]*?\}/);
+    if (objMatch) return JSON.parse(objMatch[0]);
+    throw new Error('No JSON found');
+  }
 }
 
 export async function generatePosts({ topic, platform, tone, includeEmojis, includeHashtags, length }) {
@@ -136,8 +145,8 @@ Dado un tema, genera 5 ideas de post con gancho para LinkedIn/Instagram/X dirigi
 
 Cada idea debe ser una frase corta con gancho (máximo 15 palabras) que enganche y deje claro el tema del post. Deben ser variadas y cubrir distintos ángulos del tema.
 
-Responde EXCLUSIVAMENTE con un JSON válido, sin texto adicional, con esta forma exacta:
-{"ideas": ["idea 1 con gancho", "idea 2 con gancho", "idea 3 con gancho", "idea 4 con gancho", "idea 5 con gancho"]}`;
+Responde EXCLUSIVAMENTE con un JSON válido, sin texto adicional, sin bloques de código, sin markdown, con esta forma exacta:
+{"ideas":["idea 1 con gancho","idea 2 con gancho","idea 3 con gancho","idea 4 con gancho","idea 5 con gancho"]}`;
 
 export async function generateIdeas({ topic }) {
   const apiKey = getApiKey();
@@ -177,7 +186,7 @@ export async function generateIdeas({ topic }) {
   try {
     parsed = extractJson(content);
   } catch (err) {
-    throw new Error('No se pudo interpretar la respuesta como JSON.');
+    throw new Error(`Error al interpretar respuesta: "${content.slice(0, 200)}..."`);
   }
 
   const ideas = Array.isArray(parsed.ideas) ? parsed.ideas : [];

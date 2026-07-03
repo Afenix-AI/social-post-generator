@@ -1,4 +1,4 @@
-import { HISTORY_KEY, MAX_HISTORY, SETTINGS_KEY, DEFAULT_SETTINGS } from './constants';
+import { HISTORY_KEY, IDEAS_KEY, MAX_HISTORY, SETTINGS_KEY, DEFAULT_SETTINGS } from './constants';
 
 export function getHistory() {
   try {
@@ -44,4 +44,22 @@ export function getSettings() {
 
 export function saveSettings(settings) {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
+
+export function getSavedIdeas() {
+  try {
+    const raw = localStorage.getItem(IDEAS_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+export function saveIdeas(ideas) {
+  localStorage.setItem(IDEAS_KEY, JSON.stringify(ideas.slice(0, 5)));
+}
+
+export function clearIdeas() {
+  localStorage.removeItem(IDEAS_KEY);
 }

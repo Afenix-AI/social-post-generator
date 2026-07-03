@@ -26,6 +26,7 @@ export default function ControlPanel({
   ideas,
   onGenerateIdeas,
   onSelectIdea,
+  onClearIdeas,
   ideasLoading,
 }) {
   const config = PLATFORMS[platform];
@@ -99,18 +100,29 @@ export default function ControlPanel({
           </button>
         </div>
         {ideas.length > 0 && (
-          <div className="ideas-list">
-            {ideas.map((idea, i) => (
-              <button
-                key={i}
-                type="button"
-                className="idea-chip"
-                onClick={() => onSelectIdea(idea)}
-              >
-                {idea}
+          <>
+            <div className="ideas-header">
+              <span className="ideas-header__label">Ideas generadas</span>
+              <button type="button" className="ideas-header__clear" onClick={onClearIdeas}>
+                Limpiar
               </button>
-            ))}
-          </div>
+            </div>
+            <div className="ideas-list">
+              {ideas.map((idea, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className="idea-chip"
+                  onClick={() => {
+                    onSelectIdea(idea);
+                    setIdeaTopic('');
+                  }}
+                >
+                  {idea}
+                </button>
+              ))}
+            </div>
+          </>
         )}
       </div>
 

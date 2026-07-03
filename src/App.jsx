@@ -5,7 +5,7 @@ import HistoryPanel from './components/HistoryPanel';
 import SettingsModal from './components/SettingsModal';
 import { PLATFORMS } from './lib/constants';
 import { generatePosts, generateIdeas, getApiKey, setApiKey } from './lib/nvidia';
-import { addToHistory, clearHistory, getHistory, getSettings, removeFromHistory } from './lib/storage';
+import { addToHistory, clearHistory, clearIdeas, getHistory, getSavedIdeas, getSettings, removeFromHistory, saveIdeas } from './lib/storage';
 import './App.css';
 
 function makeId() {
@@ -42,6 +42,7 @@ export default function App() {
     setPostLength(s.defaultLength);
     setIncludeEmojis(s.defaultEmojis);
     setIncludeHashtags(s.defaultHashtags);
+    setIdeas(getSavedIdeas());
   }, []);
 
   const handleOpenSettings = () => setShowSettings(true);
@@ -65,6 +66,7 @@ export default function App() {
     try {
       const result = await generateIdeas({ topic: ideaTopic.trim() });
       setIdeas(result);
+      saveIdeas(result);
     } catch (err) {
       setError(err.message || 'Error al generar ideas');
     } finally {
@@ -74,8 +76,11 @@ export default function App() {
 
   const handleSelectIdea = (idea) => {
     setTopic(idea);
+  };
+
+  const handleClearIdeas = () => {
     setIdeas([]);
-    setIdeaTopic('');
+    clearIdeas();
   };
 
   const handleSaveApiKey = () => {
@@ -191,6 +196,7 @@ export default function App() {
           ideas={ideas}
           onGenerateIdeas={handleGenerateIdeas}
           onSelectIdea={handleSelectIdea}
+          onClearIdeas={handleClearIdeas}
           ideasLoading={ideasLoading}
         />
         <HistoryPanel

@@ -222,6 +222,34 @@ input:focus {
   margin-top: 4px;
 }
 
+.ideas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.ideas-header__label {
+  font-size: 11px;
+  color: var(--text-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ideas-header__clear {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+.ideas-header__clear:hover {
+  color: var(--text-0);
+}
+
 .idea-chip {
   background: var(--bg-2);
   border: 1px solid var(--border);

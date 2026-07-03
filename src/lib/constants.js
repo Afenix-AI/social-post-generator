@@ -65,6 +65,7 @@ export const DEFAULT_PROFILE = {
 export const HISTORY_KEY = 'spg_history_v1';
 export const MAX_HISTORY = 10;
 export const SETTINGS_KEY = 'spg_settings_v1';
+export const IDEAS_KEY = 'spg_saved_ideas_v1';
 
 export const DEFAULT_SETTINGS = {
   profileName: 'Tu Nombre',

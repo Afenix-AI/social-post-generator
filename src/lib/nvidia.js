@@ -180,7 +180,7 @@ export async function generateIdeas({ topic }) {
 
   const data = await response.json();
   const content = data?.choices?.[0]?.message?.content;
-  if (!content) throw new Error('La respuesta no contiene contenido.');
+  if (!content) throw new Error(`Respuesta inesperada: ${JSON.stringify(data).slice(0, 500)}`);
 
   let parsed;
   try {

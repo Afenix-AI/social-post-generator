@@ -71,16 +71,32 @@ Responde EXCLUSIVAMENTE con un JSON v√°lido, sin texto adicional antes ni despu√
 
 function extractJson(rawText) {
   const trimmed = rawText.trim();
+
   const fenceMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  const candidate = fenceMatch ? fenceMatch[1].trim() : trimmed;
+  let candidate = fenceMatch ? fenceMatch[1].trim() : trimmed;
+
+  const braceStart = candidate.indexOf('{');
+  if (braceStart !== -1) {
+    let depth = 0;
+    let inString = false;
+    let escape = false;
+    for (let i = braceStart; i < candidate.length; i++) {
+      const ch = candidate[i];
+      if (escape) { escape = false; continue; }
+      if (ch === '\\' && inString) { escape = true; continue; }
+      if (ch === '"') { inString = !inString; continue; }
+      if (!inString) {
+        if (ch === '{') depth++;
+        if (ch === '}') { depth--; if (depth === 0) { candidate = candidate.slice(braceStart, i + 1); break; } }
+      }
+    }
+  }
 
   try {
     return JSON.parse(candidate);
   } catch {
     const arrayMatch = candidate.match(/\[[\s\S]*?\]/);
     if (arrayMatch) return JSON.parse(arrayMatch[0]);
-    const objMatch = candidate.match(/\{[\s\S]*?\}/);
-    if (objMatch) return JSON.parse(objMatch[0]);
     throw new Error('No JSON found');
   }
 }

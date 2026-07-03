@@ -213,6 +213,29 @@ input:focus {
   font-size: 12px;
   padding: 8px 14px;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 70px;
+}
+
+.spinner-btn {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-2);
+  border-top-color: var(--text-0);
+  animation: spin 0.7s linear infinite;
+}
+
+.spinner-btn--light {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+}
+
+.btn--loading {
+  cursor: wait;
 }
 
 .ideas-list {

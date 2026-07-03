@@ -92,11 +92,11 @@ export default function ControlPanel({
           />
           <button
             type="button"
-            className="btn btn--secondary btn--sm"
+            className={`btn btn--secondary btn--sm ${ideasLoading ? 'btn--loading' : ''}`}
             onClick={onGenerateIdeas}
             disabled={ideasLoading || !ideaTopic.trim()}
           >
-            {ideasLoading ? '...' : 'Generar'}
+            {ideasLoading ? <span className="spinner-btn" /> : 'Generar'}
           </button>
         </div>
         {ideas.length > 0 && (
@@ -212,11 +212,11 @@ export default function ControlPanel({
 
       <button
         type="button"
-        className="btn btn--primary btn--full"
+        className={`btn btn--primary btn--full ${isLoading ? 'btn--loading' : ''}`}
         onClick={onGenerate}
         disabled={isLoading || !topic.trim()}
       >
-        {isLoading ? 'Generando...' : 'Generar post'}
+        {isLoading ? <span className="spinner-btn spinner-btn--light" /> : 'Generar post'}
       </button>
     </div>
   );

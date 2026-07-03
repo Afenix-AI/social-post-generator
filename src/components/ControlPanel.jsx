@@ -96,7 +96,7 @@ export default function ControlPanel({
             onClick={onGenerateIdeas}
             disabled={ideasLoading || !ideaTopic.trim()}
           >
-            {ideasLoading ? <span className="spinner-btn" /> : 'Crear'}
+            {ideasLoading ? <span className="spinner-btn" /> : 'Generar'}
           </button>
         </div>
         {ideas.length > 0 && (
@@ -216,7 +216,7 @@ export default function ControlPanel({
         onClick={onGenerate}
         disabled={isLoading || !topic.trim()}
       >
-        {isLoading ? <span className="spinner-btn spinner-btn--light" /> : 'Crear post'}
+        {isLoading ? <span className="spinner-btn spinner-btn--light" /> : 'Generar post'}
       </button>
     </div>
   );

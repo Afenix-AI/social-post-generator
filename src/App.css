@@ -162,6 +162,22 @@ input:focus {
   cursor: not-allowed;
 }
 
+.btn--generate {
+  background: #dc2626;
+  color: #fff;
+  border-color: #dc2626;
+}
+
+.btn--generate {
+  background: #dc2626;
+  color: #fff;
+  border-color: #dc2626;
+}
+
+.btn--generate:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
 .btn--primary {
   background: var(--platform-color, #4a90e2);
   color: #fff;

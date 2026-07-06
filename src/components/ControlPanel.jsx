@@ -212,7 +212,7 @@ export default function ControlPanel({
 
       <button
         type="button"
-        className={`btn btn--primary btn--full ${isLoading ? 'btn--loading' : ''}`}
+        className={`btn btn--generate btn--full ${isLoading ? 'btn--loading' : ''}`}
         onClick={onGenerate}
         disabled={isLoading || !topic.trim()}
       >
